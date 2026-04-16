@@ -1,19 +1,16 @@
 package com.deepvisiontech.thecomicinator3000.features.onboarding.presentation.viewmodels
 
-import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.deepvisiontech.thecomicinator3000.features.common.domain.model.EvilResponse
-import com.deepvisiontech.thecomicinator3000.features.onboarding.domain.usecase.GetStoragePermissionStateFlowUseCase
 import com.deepvisiontech.thecomicinator3000.features.onboarding.domain.usecase.GetStoragePermissionUriFlow
-import com.deepvisiontech.thecomicinator3000.features.onboarding.domain.usecase.SetStoragePermissionStateUseCase
 import com.deepvisiontech.thecomicinator3000.features.onboarding.domain.usecase.SetStorageUriUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -33,10 +30,8 @@ sealed interface OnBoardingScreenEvent {
 
 sealed interface OnBoardingScreenAction {
     data class OnAccessGranted(
-        val uri: Uri
+        val uri: String
     ): OnBoardingScreenAction
-
-    data object OnPermissionCheckPassed: OnBoardingScreenAction
 
     data object OnAccessDenied: OnBoardingScreenAction
 }
@@ -44,18 +39,15 @@ sealed interface OnBoardingScreenAction {
 @HiltViewModel
 class OnBoardingViewModel @Inject constructor(
     private val setStorageUriUseCase: SetStorageUriUseCase,
-    private val setStoragePermissionStateUseCase: SetStoragePermissionStateUseCase,
-    getStoragePermissionStateFlowUseCase: GetStoragePermissionStateFlowUseCase,
     getStoragePermissionUriFlow: GetStoragePermissionUriFlow
 ): ViewModel() {
 
-    val uiState: StateFlow<OnBoardingState> = combine(
-        getStoragePermissionStateFlowUseCase(),
-        getStoragePermissionUriFlow()
-    ) { isGranted, uri ->
+    val uiState: StateFlow<OnBoardingState> =
+        getStoragePermissionUriFlow().map{ uri ->
+
         OnBoardingState(
-            isPermissionGranted = isGranted,
-            storageUri = uri?.toString() ?: ""
+            isPermissionGranted = uri != null,
+            storageUri = uri ?: ""
         )
     }.stateIn(
         scope = viewModelScope,
@@ -66,17 +58,11 @@ class OnBoardingViewModel @Inject constructor(
     private val _uiEvent = MutableSharedFlow<OnBoardingScreenEvent>()
     val uiEvent = _uiEvent.asSharedFlow()
 
-    private fun onAccessGranted(uri: Uri) {
+    private fun onAccessGranted(uri: String) {
         viewModelScope.launch {
             val uriResponse = setStorageUriUseCase(uri)
             if (uriResponse is EvilResponse.Failure) {
                 _uiEvent.emit(OnBoardingScreenEvent.Error("Failed to save Storage URI"))
-                return@launch
-            }
-
-            val stateResponse = setStoragePermissionStateUseCase(true)
-            if (stateResponse is EvilResponse.Failure) {
-                _uiEvent.emit(OnBoardingScreenEvent.Error("Failed to save Permission State"))
                 return@launch
             }
 
@@ -86,25 +72,12 @@ class OnBoardingViewModel @Inject constructor(
 
     private fun onAccessDenied() {
         viewModelScope.launch {
-            val response = setStoragePermissionStateUseCase(false)
+            val response = setStorageUriUseCase(null)
 
             if (response is EvilResponse.Failure) {
                 _uiEvent.emit(OnBoardingScreenEvent.Error("Failed to update Permission State"))
                 return@launch
             }
-        }
-    }
-
-    private fun onPermissionCheckPassed() {
-        viewModelScope.launch {
-            val response = setStoragePermissionStateUseCase(true)
-
-            if (response is EvilResponse.Failure) {
-                _uiEvent.emit(OnBoardingScreenEvent.Error("Failed to update Permission State"))
-                return@launch
-            }
-
-            _uiEvent.emit(OnBoardingScreenEvent.NavigateToLibrary)
         }
     }
 
@@ -113,7 +86,6 @@ class OnBoardingViewModel @Inject constructor(
         when(action) {
             OnBoardingScreenAction.OnAccessDenied -> onAccessDenied()
             is OnBoardingScreenAction.OnAccessGranted -> onAccessGranted(action.uri)
-            OnBoardingScreenAction.OnPermissionCheckPassed -> onPermissionCheckPassed()
         }
     }
 }

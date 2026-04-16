@@ -8,7 +8,7 @@ import javax.inject.Inject
 class SetStorageUriUseCase @Inject constructor(
     private val storageAccessRepository: StorageAccessRepository
 ) {
-    suspend operator fun invoke(uri: Uri): EvilResponse<Unit> {
+    suspend operator fun invoke(uri: String?): EvilResponse<Unit> {
         return storageAccessRepository.setStorageUri(uri)
     }
 }

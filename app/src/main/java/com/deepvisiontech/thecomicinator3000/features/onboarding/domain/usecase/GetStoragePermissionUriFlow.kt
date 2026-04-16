@@ -8,7 +8,7 @@ import javax.inject.Inject
 class GetStoragePermissionUriFlow @Inject constructor(
     private val storageAccessRepository: StorageAccessRepository
 ) {
-    operator fun invoke(): Flow<Uri?> {
+    operator fun invoke(): Flow<String?> {
         return storageAccessRepository.storageUri
     }
 }
