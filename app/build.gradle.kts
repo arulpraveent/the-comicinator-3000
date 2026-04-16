@@ -45,12 +45,16 @@ android {
 dependencies {
 
     //Dependency Injection
-    implementation("com.google.dagger:hilt-android:2.57.1")
-    ksp("com.google.dagger:hilt-android-compiler:2.57.1")
+    implementation(libs.dagger.hilt.android)
+    implementation(libs.androidx.datastore.core)
+    implementation(libs.androidx.datastore.preferences.core)
+    ksp(libs.hilt.android.compiler)
 
+    //Local Storage
     implementation(libs.androidx.room.runtime)
     ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)
+    implementation(libs.androidx.datastore.preferences)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
