@@ -9,7 +9,7 @@ interface StorageAccessRepository {
 
     val isStorageAccessGranted: Flow<Boolean>
 
-    suspend fun setStorageUri(): EvilResponse<Nothing>
+    suspend fun setStorageUri(uri: Uri): EvilResponse<Unit>
 
-    suspend fun setStorageAccessState(): EvilResponse<Nothing>
+    suspend fun setStorageAccessState(state: Boolean): EvilResponse<Unit>
 }

@@ -6,8 +6,10 @@ import androidx.core.net.toUri
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
+import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.stringPreferencesKey
+import com.deepvisiontech.thecomicinator3000.core.utils.data.safeEvilResponseCall
 import com.deepvisiontech.thecomicinator3000.features.common.data.storageAccessDataStore
 import com.deepvisiontech.thecomicinator3000.features.common.domain.model.EvilResponse
 import com.deepvisiontech.thecomicinator3000.features.common.domain.repository.StorageAccessRepository
@@ -44,13 +46,23 @@ class StorageAccessRepositoryImpl @Inject constructor(
             preferences[PreferenceKeys.STORAGE_ACCESS] ?: false
         }
 
-    override suspend fun setStorageUri(): EvilResponse<Nothing> {
-        TODO("Not yet implemented")
+    override suspend fun setStorageUri(uri: Uri): EvilResponse<Unit> {
+        return safeEvilResponseCall(TAG) {
+            dataStore.edit { preferences ->
+                preferences[PreferenceKeys.STORAGE_URI] = uri.toString()
+            }
+        }
     }
 
-    override suspend fun setStorageAccessState(): EvilResponse<Nothing> {
-        TODO("Not yet implemented")
+    override suspend fun setStorageAccessState(state: Boolean): EvilResponse<Unit> {
+        return safeEvilResponseCall(TAG) {
+            dataStore.edit { preferences ->
+                preferences[PreferenceKeys.STORAGE_ACCESS] = state
+            }
+        }
     }
 
-
+    private companion object {
+        private const val TAG = "StorageAccessRepositoryImpl"
+    }
 }
