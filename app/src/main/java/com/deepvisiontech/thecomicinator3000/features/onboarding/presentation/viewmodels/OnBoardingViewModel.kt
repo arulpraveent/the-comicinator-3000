@@ -3,8 +3,10 @@ package com.deepvisiontech.thecomicinator3000.features.onboarding.presentation.v
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.deepvisiontech.thecomicinator3000.core.domain.model.EvilResponse
+import com.deepvisiontech.thecomicinator3000.core.domain.model.UiText
 import com.deepvisiontech.thecomicinator3000.features.onboarding.domain.usecase.GetStoragePermissionUriFlow
 import com.deepvisiontech.thecomicinator3000.features.onboarding.domain.usecase.SetStorageUriUseCase
+import com.deepvisiontech.thecomicinator3000.features.onboarding.presentation.utils.asOnBoardingUiText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -24,7 +26,7 @@ data class OnBoardingState(
 
 sealed interface OnBoardingScreenEvent {
     data class Error(
-        val message: String
+        val message: UiText
     ): OnBoardingScreenEvent
 
     data object NavigateToLibrary: OnBoardingScreenEvent
@@ -78,7 +80,7 @@ class OnBoardingViewModel @Inject constructor(
         viewModelScope.launch {
             val uriResponse = setStorageUriUseCase(uri)
             if (uriResponse is EvilResponse.Failure) {
-                _uiEvent.emit(OnBoardingScreenEvent.Error("Failed to save Storage URI"))
+                _uiEvent.emit(OnBoardingScreenEvent.Error(uriResponse.error.asOnBoardingUiText()))
                 return@launch
             }
 
@@ -91,7 +93,7 @@ class OnBoardingViewModel @Inject constructor(
             val response = setStorageUriUseCase(null)
 
             if (response is EvilResponse.Failure) {
-                _uiEvent.emit(OnBoardingScreenEvent.Error("Failed to update Permission State"))
+                _uiEvent.emit(OnBoardingScreenEvent.Error(response.error.asOnBoardingUiText()))
                 return@launch
             }
         }

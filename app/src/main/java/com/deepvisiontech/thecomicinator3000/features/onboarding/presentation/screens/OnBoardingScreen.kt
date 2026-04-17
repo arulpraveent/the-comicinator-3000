@@ -28,9 +28,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import com.deepvisiontech.thecomicinator3000.R
 import com.deepvisiontech.thecomicinator3000.features.onboarding.presentation.viewmodels.OnBoardingScreenAction
 import com.deepvisiontech.thecomicinator3000.features.onboarding.presentation.viewmodels.OnBoardingScreenEvent
 import com.deepvisiontech.thecomicinator3000.features.onboarding.presentation.viewmodels.OnBoardingViewModel
@@ -66,7 +68,7 @@ fun OnBoardingScreen(
             when (event) {
                 is OnBoardingScreenEvent.Error -> {
                     snackbarHostState.showSnackbar(
-                        message = event.message
+                        message = event.message.asString(context)
                     )
                 }
                 OnBoardingScreenEvent.NavigateToLibrary -> {
@@ -85,7 +87,7 @@ fun OnBoardingScreen(
             CenterAlignedTopAppBar(
                 title = {
                     Text(
-                        "The Comicinator 3000",
+                        stringResource(R.string.global_app_title),
                         style = MaterialTheme.typography.titleLarge
                     )
                 }
@@ -113,11 +115,7 @@ fun OnBoardingScreen(
                         ) {
                             if (!uiState.isPermissionGranted) {
                                 Text(
-                                    text = "Ahh, curse you, responsible app design!!\n\n" +
-                                            "Before my *glorious* Comicinator can unleash its full comic-creating chaos, it requires… a folder. Yes, a simple, innocent folder! But not just any folder **a default folder that YOU must choose and grant access to!**\n\n" +
-                                            "Without it, I am powerless. POWERLESS, I tell you!!\n\n" +
-                                            "So go on, select a folder and grant access. Do it now, and together we shall proceed with magnificently dramatic efficiency!\n\n" +
-                                            "…Please?",
+                                    text = stringResource(R.string.onboarding_desc_storage_access),
                                     style = MaterialTheme.typography.bodyMedium,
                                     textAlign = TextAlign.Center
                                 )
@@ -127,11 +125,13 @@ fun OnBoardingScreen(
                                         folderLauncher.launch(null)
                                     }
                                 ) {
-                                    Text("Select Default Folder")
+                                    Text(
+                                        text = stringResource(R.string.onboarding_button_label_select_folder)
+                                    )
                                 }
                             } else {
                                 Text(
-                                    text = "Mwahaha! Access granted! The Comicinator is fully powered!",
+                                    text = stringResource(R.string.onboarding_desc_access_granted),
                                     style = MaterialTheme.typography.bodyLarge,
                                     textAlign = TextAlign.Center
                                 )
@@ -139,7 +139,9 @@ fun OnBoardingScreen(
                                 ElevatedButton(
                                     onClick = onNavigateToLibrary
                                 ) {
-                                    Text("Enter the Library")
+                                    Text(
+                                        text = stringResource(R.string.onboarding_button_label_navigate_library)
+                                    )
                                 }
                             }
                         }
