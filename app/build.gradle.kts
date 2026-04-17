@@ -10,6 +10,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlinSerialization)
 
     id("com.google.devtools.ksp")
     id("com.google.dagger.hilt.android")
@@ -22,10 +23,10 @@ val patch = 0
 val date: String? = SimpleDateFormat("dd-MMM-yyyy", Locale.UK).format(Date())
 
 // Version Code
-val epoch = LocalDate.of(2025, 1, 1)
-val today = LocalDate.now(ZoneOffset.UTC)
+val epoch = LocalDate.of(2025, 1, 1)!!
+val today = LocalDate.now(ZoneOffset.UTC)!!
 val daysSinceEpoch = ChronoUnit.DAYS.between(epoch, today).toInt()
-val currentTime = ZonedDateTime.now(ZoneOffset.UTC)
+val currentTime = ZonedDateTime.now(ZoneOffset.UTC)!!
 val hour = currentTime.hour
 val minute = currentTime.minute
 val timeCode = hour * 100 + minute
@@ -83,6 +84,9 @@ dependencies {
 
     //Icon
     implementation(libs.androidx.material.icons.extended)
+
+    //Serialization
+    implementation(libs.kotlinx.serialization.json)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
