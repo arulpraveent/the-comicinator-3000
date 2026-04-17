@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="onboarding_error_database">Failed to save Storage Path</string>
+    <string name="onboarding_error_validation">Failed to validate Storage Path</string>
+    <string name="onboarding_error_unknown">Unknown Error occurred</string>
+
+    <string name="onboarding_desc_storage_access">
+        Ahh, curse you, responsible app design!!\n\n
+        Before my *glorious* Comicinator can unleash its full comic-creating chaos, it requires… a folder. Yes, a simple, innocent folder! But not just any folder — a default folder that YOU must choose and grant access to!\n\n
+        Without it, I am powerless. POWERLESS, I tell you!!\n\n
+        So go on, select a folder and grant access. Do it now, and together we shall proceed with magnificently dramatic efficiency!\n\n
+        …Please?
+    </string>
+    <string name="onboarding_desc_access_granted">
+        Mwahaha! Access granted! The Comicinator is fully powered!
+    </string>
+
+    <string name="onboarding_button_label_select_folder">Select Default Folder</string>
+    <string name="onboarding_button_label_navigate_library">Enter the Library</string>
+</resources>

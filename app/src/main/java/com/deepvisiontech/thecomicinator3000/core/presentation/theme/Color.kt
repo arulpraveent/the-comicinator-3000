@@ -1,4 +1,4 @@
-package com.deepvisiontech.thecomicinator3000.core.ui.theme
+package com.deepvisiontech.thecomicinator3000.core.presentation.theme
 
 import androidx.compose.ui.graphics.Color
 
