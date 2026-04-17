@@ -5,7 +5,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import com.deepvisiontech.thecomicinator3000.core.presentation.theme.TheComicinator3000Theme
-import com.deepvisiontech.thecomicinator3000.features.onboarding.presentation.screens.OnBoardingScreen
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -15,9 +14,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             TheComicinator3000Theme {
-                OnBoardingScreen(
-                    onNavigateToLibrary = {}
-                )
+                AppScreen()
             }
         }
     }
