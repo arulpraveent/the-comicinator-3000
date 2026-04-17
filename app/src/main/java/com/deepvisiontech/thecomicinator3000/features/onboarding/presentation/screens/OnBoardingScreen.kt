@@ -10,8 +10,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.CircularWavyProgressIndicator
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Scaffold
@@ -33,7 +35,7 @@ import com.deepvisiontech.thecomicinator3000.features.onboarding.presentation.vi
 import com.deepvisiontech.thecomicinator3000.features.onboarding.presentation.viewmodels.OnBoardingScreenEvent
 import com.deepvisiontech.thecomicinator3000.features.onboarding.presentation.viewmodels.OnBoardingViewModel
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun OnBoardingScreen(
     modifier: Modifier = Modifier,
@@ -98,47 +100,59 @@ fun OnBoardingScreen(
                     .padding(paddingValues)
                     .padding(16.dp)
             ) {
-                OutlinedCard(
-                    modifier = Modifier.fillMaxWidth()
-                ) {
+                if (!uiState.isLoading) {
+                    OutlinedCard(
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(24.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.spacedBy(16.dp)
+                        ) {
+                            if (!uiState.isPermissionGranted) {
+                                Text(
+                                    text = "Ahh, curse you, responsible app design!!\n\n" +
+                                            "Before my *glorious* Comicinator can unleash its full comic-creating chaos, it requires… a folder. Yes, a simple, innocent folder! But not just any folder **a default folder that YOU must choose and grant access to!**\n\n" +
+                                            "Without it, I am powerless. POWERLESS, I tell you!!\n\n" +
+                                            "So go on, select a folder and grant access. Do it now, and together we shall proceed with magnificently dramatic efficiency!\n\n" +
+                                            "…Please?",
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    textAlign = TextAlign.Center
+                                )
+
+                                ElevatedButton(
+                                    onClick = {
+                                        folderLauncher.launch(null)
+                                    }
+                                ) {
+                                    Text("Select Default Folder")
+                                }
+                            } else {
+                                Text(
+                                    text = "Mwahaha! Access granted! The Comicinator is fully powered!",
+                                    style = MaterialTheme.typography.bodyLarge,
+                                    textAlign = TextAlign.Center
+                                )
+
+                                ElevatedButton(
+                                    onClick = onNavigateToLibrary
+                                ) {
+                                    Text("Enter the Library")
+                                }
+                            }
+                        }
+                    }
+                } else {
                     Column(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(24.dp),
                         horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.spacedBy(16.dp)
+                        verticalArrangement = Arrangement.Center
                     ) {
-                        if (!uiState.isPermissionGranted) {
-                            Text(
-                                text = "Ahh, curse you, responsible app design!!\n\n" +
-                                        "Before my *glorious* Comicinator can unleash its full comic-creating chaos, it requires… a folder. Yes, a simple, innocent folder! But not just any folder **a default folder that YOU must choose and grant access to!**\n\n" +
-                                        "Without it, I am powerless. POWERLESS, I tell you!!\n\n" +
-                                        "So go on, select a folder and grant access. Do it now, and together we shall proceed with magnificently dramatic efficiency!\n\n" +
-                                        "…Please?",
-                                style = MaterialTheme.typography.bodyMedium,
-                                textAlign = TextAlign.Center
-                            )
-
-                            ElevatedButton(
-                                onClick = {
-                                    folderLauncher.launch(null)
-                                }
-                            ) {
-                                Text("Select Default Folder")
-                            }
-                        } else {
-                            Text(
-                                text = "Mwahaha! Access granted! The Comicinator is fully powered!",
-                                style = MaterialTheme.typography.bodyLarge,
-                                textAlign = TextAlign.Center
-                            )
-
-                            ElevatedButton(
-                                onClick = onNavigateToLibrary
-                            ) {
-                                Text("Enter the Library")
-                            }
-                        }
+                        CircularWavyProgressIndicator()
                     }
                 }
             }

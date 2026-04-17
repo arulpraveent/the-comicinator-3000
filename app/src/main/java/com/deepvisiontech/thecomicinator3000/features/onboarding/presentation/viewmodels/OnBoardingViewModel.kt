@@ -10,12 +10,14 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 data class OnBoardingState(
+    val isLoading: Boolean = true,
     val isPermissionGranted: Boolean = false,
     val storageUri: String = ""
 )
@@ -39,24 +41,38 @@ sealed interface OnBoardingScreenAction {
 @HiltViewModel
 class OnBoardingViewModel @Inject constructor(
     private val setStorageUriUseCase: SetStorageUriUseCase,
-    getStoragePermissionUriFlow: GetStoragePermissionUriFlow
+    private val getStoragePermissionUriFlow: GetStoragePermissionUriFlow
 ): ViewModel() {
 
     val uiState: StateFlow<OnBoardingState> =
         getStoragePermissionUriFlow().map{ uri ->
-
         OnBoardingState(
+            isLoading = false,
             isPermissionGranted = uri != null,
             storageUri = uri ?: ""
         )
     }.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5000),
-        initialValue = OnBoardingState()
+        initialValue = OnBoardingState(isLoading = true)
     )
 
     private val _uiEvent = MutableSharedFlow<OnBoardingScreenEvent>()
     val uiEvent = _uiEvent.asSharedFlow()
+
+    init {
+        performInitialCheck()
+    }
+
+    private fun performInitialCheck() {
+        viewModelScope.launch {
+            val uri = getStoragePermissionUriFlow().first()
+
+            if (!uri.isNullOrBlank()) {
+                _uiEvent.emit(OnBoardingScreenEvent.NavigateToLibrary)
+            }
+        }
+    }
 
     private fun onAccessGranted(uri: String) {
         viewModelScope.launch {
