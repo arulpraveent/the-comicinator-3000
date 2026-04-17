@@ -1,4 +1,4 @@
-package com.deepvisiontech.thecomicinator3000.core.ui.theme
+package com.deepvisiontech.thecomicinator3000.core.presentation.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.font.FontFamily

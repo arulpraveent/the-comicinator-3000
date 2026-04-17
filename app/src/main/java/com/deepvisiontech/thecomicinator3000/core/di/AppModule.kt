@@ -1,8 +1,8 @@
-package com.deepvisiontech.thecomicinator3000.features.onboarding.di
+package com.deepvisiontech.thecomicinator3000.core.di
 
 import android.content.Context
-import com.deepvisiontech.thecomicinator3000.features.common.data.local.repository.StorageAccessRepositoryImpl
-import com.deepvisiontech.thecomicinator3000.features.common.domain.repository.StorageAccessRepository
+import com.deepvisiontech.thecomicinator3000.core.data.local.repository.StorageAccessRepositoryImpl
+import com.deepvisiontech.thecomicinator3000.core.domain.repository.StorageAccessRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -12,7 +12,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object OnBoardingModule {
+object AppModule {
 
     @Provides
     @Singleton

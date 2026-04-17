@@ -1,7 +1,7 @@
-package com.deepvisiontech.thecomicinator3000.core.utils.data
+package com.deepvisiontech.thecomicinator3000.core.data.utils
 
 import android.util.Log
-import com.deepvisiontech.thecomicinator3000.features.common.domain.model.EvilResponse
+import com.deepvisiontech.thecomicinator3000.core.domain.model.EvilResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlin.coroutines.cancellation.CancellationException

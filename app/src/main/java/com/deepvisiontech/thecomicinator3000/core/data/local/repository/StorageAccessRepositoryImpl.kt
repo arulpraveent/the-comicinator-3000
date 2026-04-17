@@ -1,25 +1,24 @@
-package com.deepvisiontech.thecomicinator3000.features.common.data.local.repository
+package com.deepvisiontech.thecomicinator3000.core.data.local.repository
 
 import android.content.Context
-import android.net.Uri
 import android.util.Log
+import androidx.core.net.toUri
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.stringPreferencesKey
-import com.deepvisiontech.thecomicinator3000.core.utils.data.safeEvilResponseCall
-import com.deepvisiontech.thecomicinator3000.features.common.data.storageAccessDataStore
-import com.deepvisiontech.thecomicinator3000.features.common.domain.model.EvilResponse
-import com.deepvisiontech.thecomicinator3000.features.common.domain.repository.StorageAccessRepository
+import androidx.documentfile.provider.DocumentFile
+import com.deepvisiontech.thecomicinator3000.core.domain.model.EvilResponse
+import com.deepvisiontech.thecomicinator3000.core.domain.repository.StorageAccessRepository
+import com.deepvisiontech.thecomicinator3000.core.data.utils.safeEvilResponseCall
+import com.deepvisiontech.thecomicinator3000.core.data.storageAccessDataStore
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
-import androidx.core.net.toUri
-import androidx.documentfile.provider.DocumentFile
 
 class StorageAccessRepositoryImpl @Inject constructor(
     @ApplicationContext private val context: Context

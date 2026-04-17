@@ -2,7 +2,7 @@ package com.deepvisiontech.thecomicinator3000.features.onboarding.presentation.v
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.deepvisiontech.thecomicinator3000.features.common.domain.model.EvilResponse
+import com.deepvisiontech.thecomicinator3000.core.domain.model.EvilResponse
 import com.deepvisiontech.thecomicinator3000.features.onboarding.domain.usecase.GetStoragePermissionUriFlow
 import com.deepvisiontech.thecomicinator3000.features.onboarding.domain.usecase.SetStorageUriUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel

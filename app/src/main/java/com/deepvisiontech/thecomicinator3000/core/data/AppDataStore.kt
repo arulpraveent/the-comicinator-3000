@@ -1,4 +1,4 @@
-package com.deepvisiontech.thecomicinator3000.features.common.data
+package com.deepvisiontech.thecomicinator3000.core.data
 
 import android.content.Context
 import androidx.datastore.core.DataStore

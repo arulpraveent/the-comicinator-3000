@@ -1,4 +1,4 @@
-package com.deepvisiontech.thecomicinator3000.features.common.domain.model
+package com.deepvisiontech.thecomicinator3000.core.domain.model
 
 sealed interface EvilResponse<out T> {
 

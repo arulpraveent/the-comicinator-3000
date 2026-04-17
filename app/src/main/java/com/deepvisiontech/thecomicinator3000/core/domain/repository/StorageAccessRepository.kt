@@ -1,6 +1,6 @@
-package com.deepvisiontech.thecomicinator3000.features.common.domain.repository
+package com.deepvisiontech.thecomicinator3000.core.domain.repository
 
-import com.deepvisiontech.thecomicinator3000.features.common.domain.model.EvilResponse
+import com.deepvisiontech.thecomicinator3000.core.domain.model.EvilResponse
 import kotlinx.coroutines.flow.Flow
 
 interface StorageAccessRepository {
