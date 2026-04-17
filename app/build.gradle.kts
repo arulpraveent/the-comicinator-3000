@@ -1,3 +1,11 @@
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.ZoneOffset
+import java.time.ZonedDateTime
+import java.time.temporal.ChronoUnit
+import java.util.Date
+import java.util.Locale
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -7,6 +15,21 @@ plugins {
     id("com.google.dagger.hilt.android")
 }
 
+// Version Name
+val major = 0
+val minor = 0
+val patch = 0
+val date: String? = SimpleDateFormat("dd-MMM-yyyy", Locale.UK).format(Date())
+
+// Version Code
+val epoch = LocalDate.of(2025, 1, 1)
+val today = LocalDate.now(ZoneOffset.UTC)
+val daysSinceEpoch = ChronoUnit.DAYS.between(epoch, today).toInt()
+val currentTime = ZonedDateTime.now(ZoneOffset.UTC)
+val hour = currentTime.hour
+val minute = currentTime.minute
+val timeCode = hour * 100 + minute
+
 android {
     namespace = "com.deepvisiontech.thecomicinator3000"
     compileSdk = 36
@@ -15,8 +38,8 @@ android {
         applicationId = "com.deepvisiontech.thecomicinator3000"
         minSdk = 30
         targetSdk = 36
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = daysSinceEpoch * 10000 + timeCode
+        versionName = "$major.$minor.$patch $date"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
