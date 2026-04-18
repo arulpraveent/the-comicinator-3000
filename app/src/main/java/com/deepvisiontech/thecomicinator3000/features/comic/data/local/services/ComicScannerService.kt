@@ -9,7 +9,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-class StorageService @Inject constructor(
+class ComicScannerService @Inject constructor(
     @ApplicationContext private val context: Context
 ) {
     suspend fun scanForComics(folderUriString: String): List<Comic> = withContext(Dispatchers.IO) {

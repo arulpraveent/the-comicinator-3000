@@ -88,6 +88,9 @@ dependencies {
     //Serialization
     implementation(libs.kotlinx.serialization.json)
 
+    //WorkManager (Background Jobs)
+    implementation(libs.androidx.work.runtime.ktx)
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -100,6 +103,7 @@ dependencies {
 
     //Testing
     testImplementation(libs.androidx.room.testing)
+    androidTestImplementation(libs.androidx.work.testing)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

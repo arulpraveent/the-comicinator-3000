@@ -16,16 +16,16 @@ interface ComicDao {
     fun getAllComics(): Flow<List<ComicEntity>>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertComic(comic: ComicEntity)
+    suspend fun insertComics(comics: List<ComicEntity>)
 
-    @Query("UPDATE comics SET last_opened = :timestamp WHERE id = :comicId")
-    suspend fun updateLastOpened(comicId: String, timestamp: Long)
+    @Query("UPDATE comics SET last_opened = :timeStamp WHERE id = :comicId")
+    suspend fun updateLastOpened(comicId: String, timeStamp: Long)
 
     @Query("UPDATE comics SET cover_image_uri = :coverUri WHERE id = :comicId")
     suspend fun updateCover(comicId: String, coverUri: String)
 
     @Delete
-    suspend fun deleteComic(comic: ComicEntity)
+    suspend fun deleteComics(comics: List<ComicEntity>)
 
     @Query("DELETE FROM comics WHERE id NOT IN (:validIds)")
     suspend fun deleteMissingComics(validIds: List<String>)
