@@ -4,8 +4,9 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import com.deepvisiontech.thecomicinator3000.features.comic.data.local.dao.ComicDao
 import com.deepvisiontech.thecomicinator3000.features.comic.data.local.entity.ComicEntity
+import com.deepvisiontech.thecomicinator3000.features.comic.data.local.entity.ComicMetadataEntity
 
-@Database(entities = [ComicEntity::class], version = 1)
+@Database(entities = [ComicEntity::class, ComicMetadataEntity::class], version = 1)
 abstract class AppDatabase: RoomDatabase() {
     abstract fun comicDao(): ComicDao
 }
