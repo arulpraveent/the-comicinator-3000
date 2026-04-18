@@ -30,6 +30,7 @@ fun ComicMetadataEntity.toComicMetadata(): ComicMetadata {
 fun ComicWithMetadataEntity.toComic(): Comic {
     return Comic(
         id = this.comic.id,
+        collectionId = this.comic.collectionId,
         displayName = this.comic.displayName,
         lastOpened = this.comic.lastOpened,
         fileUri = this.comic.fileUri,

@@ -8,7 +8,11 @@ interface ComicRepository {
 
     suspend fun scanAndSyncComics(uriString: String): EvilResponse<Unit>
 
-    fun getAllComics(): Flow<List<Comic>>
+    fun getAllComicsFlow(): Flow<List<Comic>>
+
+    fun getAllComicsOfCollectionFlow(id: Long): Flow<List<Comic>>
+
+    suspend fun addComicsToCollection(comicIds: List<String>, collectionId: Long): EvilResponse<Unit>
 
     suspend fun insertComics(comics: List<Comic>): EvilResponse<Unit>
 

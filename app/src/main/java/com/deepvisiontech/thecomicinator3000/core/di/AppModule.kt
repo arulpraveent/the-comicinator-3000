@@ -1,6 +1,7 @@
 package com.deepvisiontech.thecomicinator3000.core.di
 
 import android.content.Context
+import com.deepvisiontech.thecomicinator3000.core.data.AppDatabase
 import com.deepvisiontech.thecomicinator3000.core.data.local.repository.StorageAccessRepositoryImpl
 import com.deepvisiontech.thecomicinator3000.core.domain.repository.StorageAccessRepository
 import dagger.Module
@@ -18,5 +19,11 @@ object AppModule {
     @Singleton
     fun provideStorageAccessRepository(@ApplicationContext context: Context): StorageAccessRepository {
         return StorageAccessRepositoryImpl(context)
+    }
+
+    @Provides
+    @Singleton
+    fun provideAppDatabase(@ApplicationContext context: Context): AppDatabase {
+        return AppDatabase.getInstance(context)
     }
 }
