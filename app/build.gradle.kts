@@ -73,6 +73,7 @@ dependencies {
     implementation(libs.androidx.documentfile)
     ksp(libs.hilt.android.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
+    implementation(libs.androidx.hilt.work)
 
     //Local Storage
     implementation(libs.androidx.room.runtime)

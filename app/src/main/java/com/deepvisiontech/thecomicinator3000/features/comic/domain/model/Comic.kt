@@ -7,5 +7,6 @@ data class Comic(
     val fileUri: String,
     val coverImageUri: String? = null,
     val fileSize: Long,
-    val isSelected: Boolean = false
+    val isSelected: Boolean = false,
+    val metadata: ComicMetadata?
 )

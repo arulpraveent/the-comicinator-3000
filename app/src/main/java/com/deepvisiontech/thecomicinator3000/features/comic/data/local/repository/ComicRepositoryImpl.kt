@@ -27,7 +27,7 @@ class ComicRepositoryImpl @Inject constructor(
     }
 
     override fun getAllComics(): Flow<List<Comic>> {
-        return comicDao.getAllComics().map { entities -> entities.map { it.toComic() } }
+        return comicDao.getAllComicsWithMetadataFlow().map { entities -> entities.map { it.toComic() } }
     }
 
     override suspend fun insertComics(comics: List<Comic>): EvilResponse<Unit> {

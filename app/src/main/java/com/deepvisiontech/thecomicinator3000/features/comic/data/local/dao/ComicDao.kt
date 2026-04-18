@@ -5,15 +5,20 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import androidx.room.Update
+import androidx.room.Transaction
 import com.deepvisiontech.thecomicinator3000.features.comic.data.local.entity.ComicEntity
+import com.deepvisiontech.thecomicinator3000.features.comic.data.local.entity.ComicWithMetadataEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface ComicDao {
 
+    @Transaction
     @Query("SELECT * FROM comics ORDER BY last_opened DESC")
-    fun getAllComics(): Flow<List<ComicEntity>>
+    fun getAllComicsWithMetadataFlow(): Flow<List<ComicWithMetadataEntity>>
+
+    @Query("SELECT * FROM comics WHERE cover_image_uri IS NULL")
+    suspend fun getAllComicsWithoutCover(): List<ComicEntity>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertComics(comics: List<ComicEntity>)
@@ -23,6 +28,15 @@ interface ComicDao {
 
     @Query("UPDATE comics SET cover_image_uri = :coverUri WHERE id = :comicId")
     suspend fun updateCover(comicId: String, coverUri: String)
+
+    @Query("""
+        UPDATE metadata 
+        SET title = :title, series = :series, number = :number, genre = :genre, year = :year 
+        WHERE comicId = :comicId
+    """)
+    suspend fun updateMetadata(
+        comicId: String, title: String?, series: String?, number: String?, genre: String?, year: String?
+    )
 
     @Delete
     suspend fun deleteComics(comics: List<ComicEntity>)
