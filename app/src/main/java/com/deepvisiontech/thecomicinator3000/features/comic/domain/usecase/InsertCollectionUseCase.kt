@@ -8,7 +8,12 @@ import javax.inject.Inject
 class InsertCollectionUseCase @Inject constructor(
     private val comicCollectionRepository: ComicCollectionRepository
 ) {
-    suspend operator fun invoke(comicCollection: ComicCollection): EvilResponse<Unit> {
+    suspend operator fun invoke(collectionName: String): EvilResponse<Unit> {
+        val comicCollection = ComicCollection(
+            0,
+            collectionName,
+            System.currentTimeMillis()
+        )
         return comicCollectionRepository.insertCollection(comicCollection)
     }
 }

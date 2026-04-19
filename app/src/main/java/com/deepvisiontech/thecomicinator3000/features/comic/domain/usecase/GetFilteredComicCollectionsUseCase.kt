@@ -22,7 +22,11 @@ class GetFilteredComicCollectionsUseCase @Inject constructor(
             dateFilterRange,
             comicCollectionRepository.getAllComicCollection()
         ) { searchQuery, listSortOrder, dateFilterRange, collection ->
-            val searchedCollection = collection.filter { it.displayName.contains(searchQuery, ignoreCase = true) }
+            val searchedCollection = if (searchQuery.isNotBlank()) {
+                collection.filter { it.displayName.contains(searchQuery, ignoreCase = true) }
+            } else {
+                collection
+            }
 
             val sortedCollection = when(listSortOrder) {
                 ListSortOrder.BY_TIME_ASC -> {
