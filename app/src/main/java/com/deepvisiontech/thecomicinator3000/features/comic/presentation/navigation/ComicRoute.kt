@@ -6,4 +6,7 @@ sealed interface ComicRoute {
 
     @Serializable
     data object ComicLibrary: ComicRoute
+
+    @Serializable
+    data class ComicCollection(val collectionId: Long?): ComicRoute
 }

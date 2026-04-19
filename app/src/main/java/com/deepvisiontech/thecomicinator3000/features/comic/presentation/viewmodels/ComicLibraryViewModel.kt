@@ -2,6 +2,7 @@ package com.deepvisiontech.thecomicinator3000.features.comic.presentation.viewmo
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.deepvisiontech.thecomicinator3000.R
 import com.deepvisiontech.thecomicinator3000.core.domain.model.DateFilterRange
 import com.deepvisiontech.thecomicinator3000.core.domain.model.EvilResponse
 import com.deepvisiontech.thecomicinator3000.core.domain.model.ListSortOrder
@@ -123,7 +124,7 @@ class ComicLibraryViewModel @Inject constructor(
             if (response is EvilResponse.Failure) {
                 _uiEvent.emit(
                     ComicLibraryUiEvent.Error(
-                        UiText.DynamicString("")
+                        UiText.StringResource(R.string.comic_library_error_create_collection)
                     )
                 )
             }
@@ -138,7 +139,7 @@ class ComicLibraryViewModel @Inject constructor(
                 is EvilResponse.Failure -> {
                     _uiEvent.emit(
                         ComicLibraryUiEvent.Error(
-                            UiText.DynamicString("")
+                            UiText.StringResource(R.string.comic_library_error_delete_collection)
                         )
                     )
                 }

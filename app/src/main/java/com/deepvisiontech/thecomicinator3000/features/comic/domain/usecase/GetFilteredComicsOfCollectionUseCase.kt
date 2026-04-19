@@ -12,15 +12,20 @@ class GetFilteredComicsOfCollectionUseCase @Inject constructor(
     private val comicRepository: ComicRepository
 ) {
     operator fun invoke(
-        collectionId: Long,
+        collectionId: Long?,
         searchQuery: Flow<String>
     ): Flow<List<Comic>> {
+        val comicsFlow = if (collectionId == null) {
+            comicRepository.getAllUncollectedComicsFlow()
+        } else {
+            comicRepository.getAllComicsOfCollectionFlow(collectionId)
+        }
+
         return combine(
             searchQuery,
-            comicRepository.getAllComicsOfCollectionFlow(collectionId)
-        ) { searchQuery,  comics ->
-            val searchedCollection = comics.filter { it.displayName.contains(searchQuery, ignoreCase = true) }
-            searchedCollection
+            comicsFlow
+        ) { query, comics ->
+            comics.filter { it.displayName.contains(query, ignoreCase = true) }
         }
     }
 }

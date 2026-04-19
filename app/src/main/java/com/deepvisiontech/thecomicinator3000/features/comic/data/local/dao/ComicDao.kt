@@ -21,8 +21,12 @@ interface ComicDao {
     @Query("SELECT * FROM comics WHERE collectionId IS :id ORDER BY last_opened DESC")
     fun getAllComicsOfCollectionWithMetadataFlow(id: Long): Flow<List<ComicWithMetadataEntity>>
 
+    @Transaction
+    @Query("SELECT * FROM comics WHERE collectionId IS NULL ORDER BY last_opened DESC")
+    fun getAllUncollectedComics(): Flow<List<ComicWithMetadataEntity>>
+
     @Query("UPDATE comics SET collectionId = :collectionId WHERE id IN (:comicIds)")
-    suspend fun addComicsToCollection(comicIds: List<String>, collectionId: Long)
+    suspend fun addComicsToCollection(comicIds: List<String>, collectionId: Long?)
 
     @Query("SELECT * FROM comics WHERE cover_image_uri IS NULL")
     suspend fun getAllComicsWithoutCover(): List<ComicEntity>

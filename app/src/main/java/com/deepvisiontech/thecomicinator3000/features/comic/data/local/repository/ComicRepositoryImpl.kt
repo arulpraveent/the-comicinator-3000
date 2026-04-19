@@ -62,9 +62,13 @@ class ComicRepositoryImpl @Inject constructor(
         return comicDao.getAllComicsOfCollectionWithMetadataFlow(id).map { entities -> entities.map { it.toComic() } }
     }
 
+    override fun getAllUncollectedComicsFlow(): Flow<List<Comic>> {
+        return comicDao.getAllUncollectedComics().map { entities -> entities.map { it.toComic() } }
+    }
+
     override suspend fun addComicsToCollection(
         comicIds: List<String>,
-        collectionId: Long
+        collectionId: Long?
     ): EvilResponse<Unit> {
         return safeEvilResponseCall(TAG) {
             comicDao.addComicsToCollection(comicIds, collectionId)

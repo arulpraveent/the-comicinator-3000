@@ -12,7 +12,9 @@ interface ComicRepository {
 
     fun getAllComicsOfCollectionFlow(id: Long): Flow<List<Comic>>
 
-    suspend fun addComicsToCollection(comicIds: List<String>, collectionId: Long): EvilResponse<Unit>
+    fun getAllUncollectedComicsFlow(): Flow<List<Comic>>
+
+    suspend fun addComicsToCollection(comicIds: List<String>, collectionId: Long?): EvilResponse<Unit>
 
     suspend fun insertComics(comics: List<Comic>): EvilResponse<Unit>
 
