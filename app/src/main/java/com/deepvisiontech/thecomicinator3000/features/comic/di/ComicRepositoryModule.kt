@@ -1,4 +1,4 @@
-package com.deepvisiontech.thecomicinator3000.features.di
+package com.deepvisiontech.thecomicinator3000.features.comic.di
 
 import com.deepvisiontech.thecomicinator3000.features.comic.data.local.repository.ComicCollectionRepositoryImpl
 import com.deepvisiontech.thecomicinator3000.features.comic.data.local.repository.ComicRepositoryImpl

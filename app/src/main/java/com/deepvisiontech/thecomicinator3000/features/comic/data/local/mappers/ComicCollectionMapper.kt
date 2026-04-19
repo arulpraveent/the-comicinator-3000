@@ -7,7 +7,7 @@ fun ComicCollection.toEntity(): ComicCollectionEntity {
     return ComicCollectionEntity(
         this.id,
         this.displayName,
-        this.dateCreated
+        this.timeCreated
     )
 }
 
