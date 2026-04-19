@@ -3,6 +3,8 @@ package com.deepvisiontech.thecomicinator3000.app
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
+import com.deepvisiontech.thecomicinator3000.features.comic.presentation.navigation.ComicGraph
+import com.deepvisiontech.thecomicinator3000.features.comic.presentation.navigation.comicGraph
 import com.deepvisiontech.thecomicinator3000.features.onboarding.presentation.navigation.OnBoardingGraph
 import com.deepvisiontech.thecomicinator3000.features.onboarding.presentation.navigation.onBoardingGraph
 
@@ -15,7 +17,14 @@ fun AppScreen() {
         startDestination = OnBoardingGraph
     ) {
         onBoardingGraph(
-            navigateToLibraryGraph = {}
+            navigateToComicGraph = {
+                navHostController.navigate(ComicGraph) {
+                    popUpTo(0) {
+                        inclusive = true
+                    }
+                }
+            }
         )
+        comicGraph()
     }
 }

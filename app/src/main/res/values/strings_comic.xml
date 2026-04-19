@@ -9,4 +9,6 @@
     <string name="comic_library_dialog_title_create_collection">Enter Collection Name</string>
 
     <string name="comic_library_text_field_label_collection">Enter Collection Name</string>
+
+    <string name="comic_library_card_collection_title">Uncollected</string>
 </resources>

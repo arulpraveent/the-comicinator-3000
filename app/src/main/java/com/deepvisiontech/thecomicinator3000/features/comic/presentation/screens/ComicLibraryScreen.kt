@@ -1,8 +1,10 @@
 package com.deepvisiontech.thecomicinator3000.features.comic.presentation.screens
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -11,8 +13,10 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.ContainedLoadingIndicator
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SearchBar
 import androidx.compose.material3.SmallExtendedFloatingActionButton
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -49,7 +53,7 @@ fun ComicLibraryScreen(
     val uiState by comicLibraryViewModel.uiState.collectAsStateWithLifecycle()
     val uiEvent = comicLibraryViewModel.uiEvent
 
-    val snackbarHostState = SnackbarHostState()
+    val snackbarHostState = remember {  SnackbarHostState() }
     var isCollectionCreationDialogVisible by remember { mutableStateOf(false) }
     var isDateFilterShown by remember { mutableStateOf(false) }
 
@@ -92,22 +96,16 @@ fun ComicLibraryScreen(
             SnackbarHost(snackbarHostState)
         },
         floatingActionButton = {
-            SmallExtendedFloatingActionButton(
-                text = {
-                    Text(
-                        stringResource(R.string.comic_library_button_create_collection)
-                    )
-                },
-                icon = {
-                    Icon(
-                        Icons.Default.Add,
-                        null
-                    )
-                },
+            FloatingActionButton(
                 onClick = {
                     isCollectionCreationDialogVisible = true
-                }
-            )
+                },
+            ) {
+                Icon(
+                    Icons.Default.Add,
+                    stringResource(R.string.global_cd_create)
+                )
+            }
         }
     ) { paddingValues ->
 
@@ -155,8 +153,10 @@ fun ComicLibraryScreen(
                 if (!uiState.isSelecting) {
                     item {
                         ComicCollectionCard(
-                            title = "Uncollected",
+                            modifier = Modifier.padding(8.dp),
+                            title = stringResource(R.string.comic_library_card_collection_title),
                             dateCreated = System.currentTimeMillis(),
+                            isSelected = false,
                             onLongClick = {
                             },
                             onClick = {
@@ -169,6 +169,7 @@ fun ComicLibraryScreen(
                 }
                 items(uiState.comicCollections) { collection ->
                     ComicCollectionCard(
+                        modifier = Modifier.padding(8.dp),
                         title = collection.displayName,
                         dateCreated = collection.timeCreated,
                         onLongClick = {
@@ -178,6 +179,7 @@ fun ComicLibraryScreen(
                                 )
                             }
                         },
+                        isSelected = collection in uiState.selectedCollections,
                         onClick = {
                             if (uiState.isSelecting) {
                                 comicLibraryViewModel.onAction(

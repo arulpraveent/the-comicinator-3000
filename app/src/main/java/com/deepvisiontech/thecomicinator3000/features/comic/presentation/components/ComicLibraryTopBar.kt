@@ -14,15 +14,12 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.MediumFlexibleTopAppBar
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.TopAppBarScrollBehavior
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -32,7 +29,6 @@ import androidx.compose.ui.unit.dp
 import com.deepvisiontech.thecomicinator3000.R
 import com.deepvisiontech.thecomicinator3000.core.domain.model.ListSortOrder
 
-@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun ComicLibraryTopBar(
     modifier: Modifier = Modifier,
@@ -49,15 +45,61 @@ fun ComicLibraryTopBar(
     val isSearching = rememberSaveable { mutableStateOf(false) }
     val showSortDropDown = rememberSaveable { mutableStateOf(false) }
 
-    MediumFlexibleTopAppBar(
+    TopAppBar(
         modifier = modifier,
         title = {
-            Text(
-                text = title,
-                color = MaterialTheme.colorScheme.primary
-            )
+            AnimatedVisibility (
+                visible = isSearching.value
+            ) {
+                OutlinedTextField(
+                    modifier = Modifier
+                        .padding(4.dp)
+                        .fillMaxWidth(),
+                    leadingIcon = {
+                        IconButton(
+                            onClick = {
+                                isSearching.value = false
+                            }
+                        ) {
+                            Icon(
+                                Icons.AutoMirrored.Filled.ArrowBack,
+                                stringResource(R.string.global_cd_navigate_back)
+                            )
+                        }
+                    },
+                    placeholder = {
+                        Text(text = searchBarPlaceHolder)
+                    },
+                    value = searchQuery,
+                    onValueChange = {
+                        onSearchQueryChange(it)
+                    },
+                    maxLines = 1,
+                    trailingIcon = {
+                        IconButton(
+                            onClick = {
+                                onSearchQueryChange("")
+                            }
+                        ) {
+                            Icon(
+                                Icons.Default.Clear,
+                                stringResource(R.string.global_cd_clear_text)
+                            )
+                        }
+                    },
+                    textStyle = MaterialTheme.typography.bodySmall,
+                    singleLine = true
+                )
+            }
+            AnimatedVisibility (
+                visible = !isSearching.value
+            ) {
+                Text(
+                    text = title,
+                    color = MaterialTheme.colorScheme.primary
+                )
+            }
         },
-        scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(),
         actions = {
             Row {
                 AnimatedVisibility (
@@ -71,50 +113,6 @@ fun ComicLibraryTopBar(
                             stringResource(R.string.global_cd_delete_item)
                         )
                     }
-                }
-
-                AnimatedVisibility (
-                    visible = isSearching.value
-                ) {
-                    OutlinedTextField(
-                        modifier = Modifier
-                            .padding(4.dp)
-                            .fillMaxWidth(),
-                        leadingIcon = {
-                            IconButton(
-                                onClick = {
-                                    isSearching.value = false
-                                }
-                            ) {
-                                Icon(
-                                    Icons.AutoMirrored.Filled.ArrowBack,
-                                    stringResource(R.string.global_cd_navigate_back)
-                                )
-                            }
-                        },
-                        placeholder = {
-                            Text(text = searchBarPlaceHolder)
-                        },
-                        value = searchQuery,
-                        onValueChange = {
-                            onSearchQueryChange(it)
-                        },
-                        maxLines = 1,
-                        trailingIcon = {
-                            IconButton(
-                                onClick = {
-                                    onSearchQueryChange("")
-                                }
-                            ) {
-                                Icon(
-                                    Icons.Default.Clear,
-                                    stringResource(R.string.global_cd_clear_text)
-                                )
-                            }
-                        },
-                        textStyle = MaterialTheme.typography.bodySmall,
-                        singleLine = true
-                    )
                 }
 
                 AnimatedVisibility (
@@ -157,7 +155,9 @@ fun ComicLibraryTopBar(
                                 )
                                 DropdownMenuItem(
                                     text = {
+                                        Text(
                                         stringResource(R.string.global_sort_descending_alph_label)
+                                        )
                                     },
                                     onClick = {
                                         onSortOrderChange(ListSortOrder.BY_NAME_DESC)
@@ -177,7 +177,9 @@ fun ComicLibraryTopBar(
                                 )
                                 DropdownMenuItem(
                                     text = {
+                                        Text(
                                         stringResource(R.string.global_sort_oldest_label)
+                                        )
                                     },
                                     onClick = {
                                         onSortOrderChange(ListSortOrder.BY_TIME_ASC)

@@ -29,6 +29,8 @@
     <string name="global_cd_expand">Expand</string>
     <string name="global_cd_collapse">Collapse</string>
     <string name="global_cd_filter_date">Filter by Date</string>
+    <string name="global_cd_create">Create</string>
+    <string name="global_cd_selected">Selected</string>
 
     <string name="global_pager_go_to_label">Go to page %1$d</string>
     <string name="global_pager_cd_page">Page %1$d</string>
