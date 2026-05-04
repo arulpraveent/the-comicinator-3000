@@ -25,6 +25,6 @@ fun AppScreen() {
                 }
             }
         )
-        comicGraph()
+        comicGraph(navHostController)
     }
 }

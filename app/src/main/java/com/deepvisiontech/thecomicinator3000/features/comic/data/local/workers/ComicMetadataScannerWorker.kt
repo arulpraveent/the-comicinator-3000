@@ -74,7 +74,10 @@ class ComicMetadataScannerWorker @AssistedInject constructor(
                 }
 
                 comicCoverBitmap?.let { bitmap ->
-                    val coverFile = File(coverFolder, "${comicEntity.id}.jpg")
+                    val safeFileName = comicEntity.id
+                        .replace("/", "_")
+                        .replace(":", "_") + ".jpg"
+                    val coverFile = File(coverFolder, safeFileName)
                     FileOutputStream(coverFile).use { out ->
                         bitmap.compress(Bitmap.CompressFormat.JPEG, 80, out)
                     }

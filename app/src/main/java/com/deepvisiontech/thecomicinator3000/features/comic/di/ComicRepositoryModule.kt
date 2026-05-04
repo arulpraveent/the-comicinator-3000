@@ -1,7 +1,7 @@
 package com.deepvisiontech.thecomicinator3000.features.comic.di
 
-import com.deepvisiontech.thecomicinator3000.features.comic.data.local.repository.ComicCollectionRepositoryImpl
-import com.deepvisiontech.thecomicinator3000.features.comic.data.local.repository.ComicRepositoryImpl
+import com.deepvisiontech.thecomicinator3000.features.comic.data.repository.ComicCollectionRepositoryImpl
+import com.deepvisiontech.thecomicinator3000.features.comic.data.repository.ComicRepositoryImpl
 import com.deepvisiontech.thecomicinator3000.features.comic.domain.repository.ComicCollectionRepository
 import com.deepvisiontech.thecomicinator3000.features.comic.domain.repository.ComicRepository
 import dagger.Binds

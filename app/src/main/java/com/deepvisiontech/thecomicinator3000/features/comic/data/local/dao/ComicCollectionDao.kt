@@ -13,6 +13,9 @@ interface ComicCollectionDao {
     @Query("SELECT * FROM collection ORDER BY dateCreated DESC")
     fun getAllCollectionsFlow(): Flow<List<ComicCollectionEntity>>
 
+    @Query("SELECT * FROM collection WHERE id = :id")
+    fun getCollectionFlow(id: Long): Flow<ComicCollectionEntity>
+
     @Insert
     suspend fun insertCollection(collection: ComicCollectionEntity)
 

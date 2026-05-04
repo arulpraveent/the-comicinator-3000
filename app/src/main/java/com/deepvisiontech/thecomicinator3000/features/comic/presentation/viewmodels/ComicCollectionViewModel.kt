@@ -10,19 +10,17 @@ import com.deepvisiontech.thecomicinator3000.core.domain.model.UiText
 import com.deepvisiontech.thecomicinator3000.features.comic.domain.model.Comic
 import com.deepvisiontech.thecomicinator3000.features.comic.domain.model.ComicCollection
 import com.deepvisiontech.thecomicinator3000.features.comic.domain.usecase.GetAllComicCollectionsUseCase
-import com.deepvisiontech.thecomicinator3000.features.comic.domain.usecase.GetFilteredComicCollectionsUseCase
+import com.deepvisiontech.thecomicinator3000.features.comic.domain.usecase.GetComicCollectionUseCase
 import com.deepvisiontech.thecomicinator3000.features.comic.domain.usecase.GetFilteredComicsOfCollectionUseCase
 import com.deepvisiontech.thecomicinator3000.features.comic.domain.usecase.MoveComicsToCollectionUseCase
 import com.deepvisiontech.thecomicinator3000.features.comic.presentation.navigation.ComicRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -30,12 +28,13 @@ import javax.inject.Inject
 
 data class ComicCollectionUiState(
     val isLoading: Boolean = true,
+    val activeCollection: ComicCollection? = null,
     val comics: List<Comic> = emptyList(),
     val allCollections: List<ComicCollection> = emptyList(),
     val selectedComics: Set<Comic> = emptySet(),
     val searchQuery: String = ""
 ) {
-    val isSearching get() = selectedComics.isNotEmpty()
+    val isSelecting get() = selectedComics.isNotEmpty()
 }
 
 sealed interface ComicCollectionUiEvent {
@@ -55,11 +54,12 @@ sealed interface ComicCollectionUiAction {
 class ComicCollectionViewModel @Inject constructor(
     private val getFilteredComicsOfCollectionUseCase: GetFilteredComicsOfCollectionUseCase,
     private val getAllComicCollectionsUseCase: GetAllComicCollectionsUseCase,
+    private val getComicCollectionUseCase: GetComicCollectionUseCase,
     private val moveComicsToCollectionUseCase: MoveComicsToCollectionUseCase,
     savedStateHandle: SavedStateHandle
 ): ViewModel() {
 
-    private val _collectionArgs = savedStateHandle.toRoute<ComicRoute.ComicCollection>()
+    private val _collectionArgs = savedStateHandle.toRoute<ComicRoute.ComicCollectionScreen>()
     private val _collectionId: Long? = _collectionArgs.collectionId
 
     private val _searchQuery = MutableStateFlow("")
@@ -71,10 +71,12 @@ class ComicCollectionViewModel @Inject constructor(
     val uiState: StateFlow<ComicCollectionUiState> = combine(
         getFilteredComicsOfCollectionUseCase(_collectionId, _searchQuery),
         getAllComicCollectionsUseCase(),
+        getComicCollectionUseCase(_collectionId),
         _searchQuery,
         _selectedComics
-    ) { comics, collections, searchQuery, selectedComics ->
+    ) { comics, collections, activeCollection, searchQuery, selectedComics ->
         ComicCollectionUiState(
+            activeCollection = activeCollection,
             isLoading = false,
             comics = comics,
             allCollections = collections,

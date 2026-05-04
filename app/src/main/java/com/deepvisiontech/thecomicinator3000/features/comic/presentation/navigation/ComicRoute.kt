@@ -5,8 +5,8 @@ import kotlinx.serialization.Serializable
 sealed interface ComicRoute {
 
     @Serializable
-    data object ComicLibrary: ComicRoute
+    data object ComicLibraryScreen: ComicRoute
 
     @Serializable
-    data class ComicCollection(val collectionId: Long?): ComicRoute
+    data class ComicCollectionScreen(val collectionId: Long?): ComicRoute
 }

@@ -8,6 +8,8 @@ interface ComicCollectionRepository {
 
     fun getAllComicCollection(): Flow<List<ComicCollection>>
 
+    fun getComicCollection(id: Long?): Flow<ComicCollection?>
+
     suspend fun insertCollection(collection: ComicCollection): EvilResponse<Unit>
 
     suspend fun deleteCollections(collections: List<ComicCollection>): EvilResponse<Unit>

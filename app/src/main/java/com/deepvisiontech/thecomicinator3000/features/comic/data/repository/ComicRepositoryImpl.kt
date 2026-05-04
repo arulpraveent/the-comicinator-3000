@@ -1,4 +1,4 @@
-package com.deepvisiontech.thecomicinator3000.features.comic.data.local.repository
+package com.deepvisiontech.thecomicinator3000.features.comic.data.repository
 
 import android.content.Context
 import androidx.work.Constraints
@@ -38,15 +38,15 @@ class ComicRepositoryImpl @Inject constructor(
 
     private fun triggerMetadataScanner() {
         val constraints = Constraints.Builder()
-            .setRequiresStorageNotLow(true)
-            .setRequiresBatteryNotLow(true)
+//            .setRequiresStorageNotLow(true)
+//            .setRequiresBatteryNotLow(true)
             .build()
 
         val workRequest = OneTimeWorkRequestBuilder<ComicMetadataScannerWorker>()
             .setConstraints(constraints)
             .build()
 
-        WorkManager.getInstance(context)
+        WorkManager.Companion.getInstance(context)
             .enqueueUniqueWork(
                 "ScanComicMetadata",
                 ExistingWorkPolicy.KEEP,
@@ -92,7 +92,7 @@ class ComicRepositoryImpl @Inject constructor(
         timeStamp: Long
     ): EvilResponse<Unit> {
         return safeEvilResponseCall(TAG) {
-            comicDao.updateLastOpened(comicId,timeStamp)
+            comicDao.updateLastOpened(comicId, timeStamp)
         }
     }
 
