@@ -66,13 +66,19 @@ android {
     }
 }
 
+ksp {
+    arg("room.schemaLocation", "$projectDir/schemas")
+}
+
 dependencies {
 
     //Dependency Injection
     implementation(libs.dagger.hilt.android)
     implementation(libs.androidx.documentfile)
     ksp(libs.hilt.android.compiler)
+    ksp(libs.androidx.hilt.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
+    implementation(libs.androidx.hilt.work)
 
     //Local Storage
     implementation(libs.androidx.room.runtime)
@@ -88,6 +94,12 @@ dependencies {
     //Serialization
     implementation(libs.kotlinx.serialization.json)
 
+    //WorkManager (Background Jobs)
+    implementation(libs.androidx.work.runtime.ktx)
+
+    //Image handling
+    implementation(libs.coil.compose)
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -100,6 +112,7 @@ dependencies {
 
     //Testing
     testImplementation(libs.androidx.room.testing)
+    androidTestImplementation(libs.androidx.work.testing)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

@@ -1,4 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="global_app_title">The Comicinator 3000</string>
+
+    <!-- Global Actions (Buttons) -->
+    <string name="global_action_cancel">Cancel</string>
+    <string name="global_action_save">Save</string>
+    <string name="global_action_create">Create</string>
+    <string name="global_action_accept">Accept</string>
+    <string name="global_action_ok">OK</string>
+    <string name="global_action_skip">Skip</string>
+    <string name="global_action_share">Share</string>
+    <string name="global_action_proceed">Proceed</string>
+    <string name="global_action_submit">Submit</string>
+    <string name="global_action_confirm">Confirm</string>
+    <string name="global_action_dismiss">Dismiss</string>
+    <string name="global_action_retry">Retry</string>
+
+    <string name="global_cd_navigate_back">Navigate back</string>
+    <string name="global_cd_menu">Open navigation menu</string>
+    <string name="global_cd_clear_text">Clear text</string>
+    <string name="global_cd_edit">Edit</string>
+    <string name="global_cd_close">Close</string>
+    <string name="global_cd_move">Move</string>
+    <string name="global_cd_back">Back</string>
+    <string name="global_cd_search">Search</string>
+    <string name="global_cd_sort">Sort</string>
+    <string name="global_cd_delete_item">Delete item</string>
+    <string name="global_cd_expand">Expand</string>
+    <string name="global_cd_collapse">Collapse</string>
+    <string name="global_cd_filter_date">Filter by Date</string>
+    <string name="global_cd_create">Create</string>
+    <string name="global_cd_selected">Selected</string>
+
+    <string name="global_pager_go_to_label">Go to page %1$d</string>
+    <string name="global_pager_cd_page">Page %1$d</string>
+
+    <string name="global_sort_ascending_alph_label">Name A → Z</string>
+    <string name="global_sort_descending_alph_label">Name Z → A</string>
+    <string name="global_sort_newest_label">Newest first</string>
+    <string name="global_sort_oldest_label">Oldest first</string>
+
+    <string name="global_picker_date_range_title">Select date range</string>
 </resources>

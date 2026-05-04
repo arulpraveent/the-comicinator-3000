@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="comic_library_title">Collections</string>
+    <string name="comic_library_search_placeholder">Collection Name</string>
+    <string name="comic_library_button_create_collection">Create Collection</string>
+    <string name="comic_library_dialog_title_create_collection">Enter Collection Name</string>
+    <string name="comic_library_text_field_label_collection">Enter Collection Name</string>
+    <string name="comic_library_card_uncollected_title">Uncollected</string>
+    <string name="comic_library_error_create_collection">Failed to Create Collection(s)</string>
+    <string name="comic_library_error_delete_collection">Failed to Delete Collections(s)</string>
+
+    <string name="comic_collection_title_uncollected">Uncollected</string>
+
+    <string name="comic_collection_error_move_comic">Failed to Move Comic(s)</string>
+</resources>

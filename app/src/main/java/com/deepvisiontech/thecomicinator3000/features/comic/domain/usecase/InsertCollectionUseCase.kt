@@ -1,0 +1,19 @@
+package com.deepvisiontech.thecomicinator3000.features.comic.domain.usecase
+
+import com.deepvisiontech.thecomicinator3000.core.domain.model.EvilResponse
+import com.deepvisiontech.thecomicinator3000.features.comic.domain.model.ComicCollection
+import com.deepvisiontech.thecomicinator3000.features.comic.domain.repository.ComicCollectionRepository
+import javax.inject.Inject
+
+class InsertCollectionUseCase @Inject constructor(
+    private val comicCollectionRepository: ComicCollectionRepository
+) {
+    suspend operator fun invoke(collectionName: String): EvilResponse<Unit> {
+        val comicCollection = ComicCollection(
+            0,
+            collectionName,
+            System.currentTimeMillis()
+        )
+        return comicCollectionRepository.insertCollection(comicCollection)
+    }
+}

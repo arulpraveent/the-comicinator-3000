@@ -10,7 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CenterAlignedTopAppBar
-import androidx.compose.material3.CircularWavyProgressIndicator
+import androidx.compose.material3.ContainedLoadingIndicator
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
@@ -42,7 +42,7 @@ import com.deepvisiontech.thecomicinator3000.features.onboarding.presentation.vi
 fun OnBoardingScreen(
     modifier: Modifier = Modifier,
     onBoardingViewModel: OnBoardingViewModel = hiltViewModel(),
-    onNavigateToLibrary: () -> Unit
+    onNavigateToComicGraph: () -> Unit
 ) {
     val uiState by onBoardingViewModel.uiState.collectAsState()
     val uiEvent = onBoardingViewModel.uiEvent
@@ -72,7 +72,7 @@ fun OnBoardingScreen(
                     )
                 }
                 OnBoardingScreenEvent.NavigateToLibrary -> {
-                    onNavigateToLibrary()
+                    onNavigateToComicGraph()
                 }
             }
         }
@@ -102,7 +102,7 @@ fun OnBoardingScreen(
                     .padding(paddingValues)
                     .padding(16.dp)
             ) {
-                if (!uiState.isLoading) {
+                if (!uiState.isLoading && !uiState.isPermissionGranted) {
                     OutlinedCard(
                         modifier = Modifier.fillMaxWidth()
                     ) {
@@ -113,36 +113,20 @@ fun OnBoardingScreen(
                             horizontalAlignment = Alignment.CenterHorizontally,
                             verticalArrangement = Arrangement.spacedBy(16.dp)
                         ) {
-                            if (!uiState.isPermissionGranted) {
-                                Text(
-                                    text = stringResource(R.string.onboarding_desc_storage_access),
-                                    style = MaterialTheme.typography.bodyMedium,
-                                    textAlign = TextAlign.Center
-                                )
+                            Text(
+                                text = stringResource(R.string.onboarding_desc_storage_access),
+                                style = MaterialTheme.typography.bodyMedium,
+                                textAlign = TextAlign.Center
+                            )
 
-                                ElevatedButton(
-                                    onClick = {
-                                        folderLauncher.launch(null)
-                                    }
-                                ) {
-                                    Text(
-                                        text = stringResource(R.string.onboarding_button_label_select_folder)
-                                    )
+                            ElevatedButton(
+                                onClick = {
+                                    folderLauncher.launch(null)
                                 }
-                            } else {
+                            ) {
                                 Text(
-                                    text = stringResource(R.string.onboarding_desc_access_granted),
-                                    style = MaterialTheme.typography.bodyLarge,
-                                    textAlign = TextAlign.Center
+                                    text = stringResource(R.string.onboarding_button_label_select_folder)
                                 )
-
-                                ElevatedButton(
-                                    onClick = onNavigateToLibrary
-                                ) {
-                                    Text(
-                                        text = stringResource(R.string.onboarding_button_label_navigate_library)
-                                    )
-                                }
                             }
                         }
                     }
@@ -154,7 +138,7 @@ fun OnBoardingScreen(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.Center
                     ) {
-                        CircularWavyProgressIndicator()
+                        ContainedLoadingIndicator()
                     }
                 }
             }
