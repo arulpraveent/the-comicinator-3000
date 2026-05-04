@@ -10,6 +10,8 @@ interface ComicRepository {
 
     fun getAllComicsFlow(): Flow<List<Comic>>
 
+    fun getComicFlow(id: String): Flow<Comic>
+
     fun getAllComicsOfCollectionFlow(id: Long): Flow<List<Comic>>
 
     fun getAllUncollectedComicsFlow(): Flow<List<Comic>>

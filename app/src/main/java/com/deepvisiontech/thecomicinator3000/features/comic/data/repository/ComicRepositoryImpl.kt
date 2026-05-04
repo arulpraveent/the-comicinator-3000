@@ -38,8 +38,6 @@ class ComicRepositoryImpl @Inject constructor(
 
     private fun triggerMetadataScanner() {
         val constraints = Constraints.Builder()
-//            .setRequiresStorageNotLow(true)
-//            .setRequiresBatteryNotLow(true)
             .build()
 
         val workRequest = OneTimeWorkRequestBuilder<ComicMetadataScannerWorker>()
@@ -56,6 +54,10 @@ class ComicRepositoryImpl @Inject constructor(
 
     override fun getAllComicsFlow(): Flow<List<Comic>> {
         return comicDao.getAllComicsWithMetadataFlow().map { entities -> entities.map { it.toComic() } }
+    }
+
+    override fun getComicFlow(id: String): Flow<Comic> {
+        return comicDao.getComicFlow(id).map { entity -> entity.toComic() }
     }
 
     override fun getAllComicsOfCollectionFlow(id: Long): Flow<List<Comic>> {

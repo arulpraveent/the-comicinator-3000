@@ -8,6 +8,7 @@ import androidx.room.Query
 import androidx.room.Transaction
 import com.deepvisiontech.thecomicinator3000.features.comic.data.local.entity.ComicEntity
 import com.deepvisiontech.thecomicinator3000.features.comic.data.local.entity.ComicWithMetadataEntity
+import com.deepvisiontech.thecomicinator3000.features.comic.domain.model.Comic
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -24,6 +25,9 @@ interface ComicDao {
     @Transaction
     @Query("SELECT * FROM comics WHERE collectionId IS NULL ORDER BY last_opened DESC")
     fun getAllUncollectedComics(): Flow<List<ComicWithMetadataEntity>>
+
+    @Query("SELECT * FROM comics WHERE id = :id")
+    fun getComicFlow(id: String): Flow<ComicWithMetadataEntity>
 
     @Query("UPDATE comics SET collectionId = :collectionId WHERE id IN (:comicIds)")
     suspend fun addComicsToCollection(comicIds: List<String>, collectionId: Long?)
