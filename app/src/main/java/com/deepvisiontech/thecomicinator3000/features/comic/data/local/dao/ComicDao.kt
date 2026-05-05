@@ -29,6 +29,10 @@ interface ComicDao {
     @Query("SELECT * FROM comics WHERE id = :id")
     fun getComicFlow(id: String): Flow<ComicWithMetadataEntity>
 
+    @Transaction
+    @Query("SELECT * FROM comics ORDER BY last_opened DESC LIMIT 10")
+    fun getRecentComicsWithMetadataFlow(): Flow<List<ComicWithMetadataEntity>>
+
     @Query("UPDATE comics SET collectionId = :collectionId WHERE id IN (:comicIds)")
     suspend fun addComicsToCollection(comicIds: List<String>, collectionId: Long?)
 
