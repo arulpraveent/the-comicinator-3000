@@ -8,7 +8,9 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -17,6 +19,8 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.CircularWavyProgressIndicator
+import androidx.compose.material3.ContainedLoadingIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -35,6 +39,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -157,38 +162,50 @@ fun ComicScreen(
         Box(
             modifier = Modifier.fillMaxSize()
         ) {
-            HorizontalPager(
-                state = pagerState,
-                modifier = Modifier.fillMaxSize()
-            ) { pageIndex ->
+            if (!uiState.isLoading) {
+                HorizontalPager(
+                    state = pagerState,
+                    modifier = Modifier.fillMaxSize()
+                ) { pageIndex ->
 
-                val zoomState = rememberZoomableImageState()
+                    val zoomState = rememberZoomableImageState()
 
-                if (pagerState.currentPage == pageIndex) {
-                    LaunchedEffect(zoomState.zoomableState.zoomFraction) {
-                        val fraction = zoomState.zoomableState.zoomFraction ?: 0f
-                        if (fraction > 0.05f) {
-                            isUiVisible = false
-                        } else if (fraction <= 0.05f) {
-                            isUiVisible = true
+                    if (pagerState.currentPage == pageIndex) {
+                        LaunchedEffect(zoomState.zoomableState.zoomFraction) {
+                            val fraction = zoomState.zoomableState.zoomFraction ?: 0f
+                            if (fraction > 0.05f) {
+                                isUiVisible = false
+                            } else if (fraction <= 0.05f) {
+                                isUiVisible = true
+                            }
                         }
                     }
-                }
 
-                LaunchedEffect(pagerState.currentPage) {
-                    if (pagerState.currentPage != pageIndex) {
-                        zoomState.zoomableState.resetZoom(animationSpec = tween(300))
+                    LaunchedEffect(pagerState.currentPage) {
+                        if (pagerState.currentPage != pageIndex) {
+                            zoomState.zoomableState.resetZoom(animationSpec = tween(300))
+                        }
                     }
-                }
 
-                ZoomableAsyncImage(
-                    state = zoomState,
-                    model = uiState.comicPages.getOrNull(pageIndex),
-                    contentDescription = stringResource(R.string.comic_cd_comic_page, pageIndex + 1),
-                    modifier = Modifier.fillMaxSize(),
-                    contentScale = ContentScale.Fit,
-                    onClick = { isUiVisible = !isUiVisible }
-                )
+                    ZoomableAsyncImage(
+                        state = zoomState,
+                        model = uiState.comicPages.getOrNull(pageIndex),
+                        contentDescription = stringResource(R.string.comic_cd_comic_page, pageIndex + 1),
+                        modifier = Modifier.fillMaxSize(),
+                        contentScale = ContentScale.Fit,
+                        onClick = { isUiVisible = !isUiVisible }
+                    )
+                }
+            } else {
+                Column(
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier
+                        .padding(paddingValues)
+                        .fillMaxSize()
+                ) {
+                    ContainedLoadingIndicator()
+                }
             }
         }
     }
