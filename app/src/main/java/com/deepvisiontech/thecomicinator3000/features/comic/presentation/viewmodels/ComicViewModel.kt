@@ -14,12 +14,14 @@ import com.deepvisiontech.thecomicinator3000.features.comic.domain.usecase.GetCo
 import com.deepvisiontech.thecomicinator3000.features.comic.domain.usecase.GetComicPagesUseCase
 import com.deepvisiontech.thecomicinator3000.features.comic.presentation.navigation.ComicRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
@@ -55,32 +57,43 @@ class ComicViewModel @Inject constructor(
 
     private val _comicArgs = savedStateHandle.toRoute<ComicRoute.ComicScreen>()
     private val _comicId = _comicArgs.comicId
-
     private val _uiEvent = MutableSharedFlow<ComicUiEvent>()
-    private val uiEvent = _uiEvent.asSharedFlow()
+    val uiEvent = _uiEvent.asSharedFlow()
 
-    val uiState: StateFlow<ComicUiState> = getComicFlowUseCase(_comicId).map { comic ->
-        val pagesResult = getComicPagesUseCase(comic)
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val uiState: StateFlow<ComicUiState> = getComicFlowUseCase(_comicId)
+        .mapLatest { comic ->
+            val pagesResult = getComicPagesUseCase(comic)
 
-        if (pagesResult is EvilResponse.Success<List<Uri>>){
-            ComicUiState(
-                isLoading = false,
-                comicPages = pagesResult.data,
-                comic = comic
-            )
-        } else {
-            ComicUiState(isLoading = true)
+            println("$comic ////////////")
+
+            if (pagesResult is EvilResponse.Success) {
+                ComicUiState(
+                    isLoading = false,
+                    comicPages = pagesResult.data,
+                    comic = comic
+                )
+            } else {
+                _uiEvent.emit(
+                    ComicUiEvent.Error(UiText.StringResource(R.string.comic_error_load_failed))
+                )
+                ComicUiState(
+                    isLoading = false,
+                    comicPages = emptyList(),
+                    comic = comic
+                )
+            }
         }
-    }.catch { exception ->
-        _uiEvent.emit(
-            ComicUiEvent.Error(
-                UiText.StringResource(R.string.comic_error_load_failed)
+        .catch { exception ->
+            _uiEvent.emit(
+                ComicUiEvent.Error(UiText.StringResource(R.string.comic_error_load_failed))
             )
+            Log.e("ComicViewModel", "Error loading comic stream:", exception)
+            emit(ComicUiState(isLoading = false))
+        }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = ComicUiState(isLoading = true)
         )
-        Log.e("ComicViewModel","Error loading comic:",exception)
-    }.stateIn(
-        viewModelScope,
-        SharingStarted.WhileSubscribed(5000),
-        ComicUiState(isLoading = true)
-    )
 }

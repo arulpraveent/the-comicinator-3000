@@ -48,10 +48,10 @@ class ComicRepositoryImpl @Inject constructor(
             .setConstraints(constraints)
             .build()
 
-        WorkManager.Companion.getInstance(context)
+        WorkManager.getInstance(context)
             .enqueueUniqueWork(
                 "ScanComicMetadata",
-                ExistingWorkPolicy.KEEP,
+                ExistingWorkPolicy.REPLACE,
                 workRequest
             )
     }

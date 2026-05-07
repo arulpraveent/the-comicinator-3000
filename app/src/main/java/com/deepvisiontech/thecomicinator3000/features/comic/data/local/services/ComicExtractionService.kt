@@ -10,6 +10,7 @@ import java.io.FileOutputStream
 import java.util.zip.ZipInputStream
 import javax.inject.Inject
 import androidx.core.net.toUri
+import java.io.IOException
 
 class ComicExtractionService @Inject constructor(
     @ApplicationContext private val context: Context
@@ -18,36 +19,63 @@ class ComicExtractionService @Inject constructor(
         private const val CACHE_DIR_NAME = "extracted_comics"
     }
 
-    suspend fun getComicPages(comicId: String, comicUri: String, recentlyOpenedIds: List<String>): List<Uri> = withContext(Dispatchers.IO) {
+    suspend fun getComicPages(
+        comicId: String,
+        comicUri: String,
+        recentlyOpenedIds: List<String>
+    ): List<Uri> = withContext(Dispatchers.IO) {
 
         val cacheDir = File(context.cacheDir, CACHE_DIR_NAME).apply {
             if (!exists()) mkdirs()
         }
 
-        val comicFolder = File(cacheDir, comicId).apply {
+        val safeComicId = comicId.replace("/", "_").replace(":", "_")
+
+        val comicFolder = File(cacheDir, safeComicId).apply {
             if (!exists()) mkdirs()
         }
 
-        if (comicFolder.listFiles()?.isEmpty() == true) {
-            extractComicPages(comicUri.toUri(), comicFolder)
+        val safeRecentIds = recentlyOpenedIds.map {
+            it.replace("/", "_").replace(":", "_")
         }
 
-        cleanupOldCaches(cacheDir, recentlyOpenedIds)
+        cleanupOldCaches(cacheDir, safeRecentIds, currentComicId = safeComicId)
+
+        if (comicFolder.listFiles()?.isEmpty() != false) {
+            val uri = comicUri.toUri()
+
+            if (!isUriAccessible(context, uri)) {
+                throw SecurityException("Permission denied or file missing: $uri")
+            }
+
+            extractComicPages(uri, comicFolder)
+        }
 
         return@withContext getSortedPageUris(comicFolder)
     }
 
-    private fun cleanupOldCaches(baseCacheDir: File, recentlyOpenedIds: List<String>) {
+    private fun cleanupOldCaches(
+        baseCacheDir: File,
+        recentlyOpenedIds: List<String>,
+        currentComicId: String
+    ) {
         val cachedComicFolders = baseCacheDir.listFiles()?.filter { it.isDirectory } ?: return
+
         cachedComicFolders.forEach { folder ->
-            if (!recentlyOpenedIds.contains(folder.name)) {
+            val isActive = folder.name == currentComicId
+            val isRecent = recentlyOpenedIds.contains(folder.name)
+
+            if (!isActive && !isRecent) {
                 folder.deleteRecursively()
             }
         }
     }
 
     private fun extractComicPages(uri: Uri, destinationFolder: File) {
-        context.contentResolver.openInputStream(uri)?.use { rawStream ->
+        val inputStream = context.contentResolver.openInputStream(uri)
+            ?: throw IOException("Could not open input stream")
+
+        inputStream.use { rawStream ->
             ZipInputStream(rawStream).use { zipInputStream ->
                 var entry = zipInputStream.nextEntry
 
@@ -80,9 +108,8 @@ class ComicExtractionService @Inject constructor(
     private fun isUriAccessible(context: Context, uri: Uri): Boolean {
         return try {
             context.contentResolver.openFileDescriptor(uri, "r")?.use {
-                return true
-            }
-            false
+                true
+            } ?: false
         } catch (_: Exception) {
             false
         }

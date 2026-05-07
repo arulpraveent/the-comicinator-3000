@@ -40,7 +40,7 @@ fun ComicCollectionScreen(
 
     val context = LocalContext.current
 
-    val snackbarHostState = remember { SnackbarHostState() }
+    val snackbarHostState by remember { mutableStateOf(SnackbarHostState()) }
     var isMoveComicsDialogVisible by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {

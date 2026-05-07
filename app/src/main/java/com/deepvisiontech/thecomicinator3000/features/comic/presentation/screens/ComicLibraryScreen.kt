@@ -49,7 +49,7 @@ fun ComicLibraryScreen(
     val uiState by comicLibraryViewModel.uiState.collectAsStateWithLifecycle()
     val uiEvent = comicLibraryViewModel.uiEvent
 
-    val snackbarHostState = remember {  SnackbarHostState() }
+    val snackbarHostState by remember {  mutableStateOf(SnackbarHostState()) }
     var isCollectionCreationDialogVisible by remember { mutableStateOf(false) }
     var isDateFilterShown by remember { mutableStateOf(false) }
 

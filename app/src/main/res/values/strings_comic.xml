@@ -13,4 +13,6 @@
 
     <string name="comic_collection_error_move_comic">Failed to Move Comic(s)</string>
     <string name="comic_error_load_failed">Failed to Load Comic</string>
+
+    <string name="comic_cd_comic_page">Comic Page %1$d</string>
 </resources>

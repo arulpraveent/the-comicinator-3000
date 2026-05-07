@@ -6,6 +6,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.deepvisiontech.thecomicinator3000.features.comic.presentation.screens.ComicCollectionScreen
 import com.deepvisiontech.thecomicinator3000.features.comic.presentation.screens.ComicLibraryScreen
+import com.deepvisiontech.thecomicinator3000.features.comic.presentation.screens.ComicScreen
 
 fun NavGraphBuilder.comicGraph(
     navHostController: NavHostController
@@ -22,7 +23,15 @@ fun NavGraphBuilder.comicGraph(
         composable<ComicRoute.ComicCollectionScreen> {
             ComicCollectionScreen(
                 navigateToComic = { id ->
+                    navHostController.navigate(ComicRoute.ComicScreen(id))
+                }
+            )
+        }
 
+        composable<ComicRoute.ComicScreen> {
+            ComicScreen(
+                navigateBack = {
+                    navHostController.popBackStack()
                 }
             )
         }
