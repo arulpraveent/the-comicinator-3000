@@ -9,4 +9,7 @@ sealed interface ComicRoute {
 
     @Serializable
     data class ComicCollectionScreen(val collectionId: Long?): ComicRoute
+
+    @Serializable
+    data class ComicScreen(val comicId: String): ComicRoute
 }

@@ -99,6 +99,7 @@ dependencies {
 
     //Image handling
     implementation(libs.coil.compose)
+    implementation(libs.zoomable.image.coil)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

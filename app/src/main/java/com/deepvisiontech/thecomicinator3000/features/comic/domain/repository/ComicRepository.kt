@@ -1,5 +1,6 @@
 package com.deepvisiontech.thecomicinator3000.features.comic.domain.repository
 
+import android.net.Uri
 import com.deepvisiontech.thecomicinator3000.core.domain.model.EvilResponse
 import com.deepvisiontech.thecomicinator3000.features.comic.domain.model.Comic
 import kotlinx.coroutines.flow.Flow
@@ -9,6 +10,10 @@ interface ComicRepository {
     suspend fun scanAndSyncComics(uriString: String): EvilResponse<Unit>
 
     fun getAllComicsFlow(): Flow<List<Comic>>
+
+    fun getComicFlow(id: String): Flow<Comic>
+
+    suspend fun getComicPages(comic: Comic): EvilResponse<List<Uri>>
 
     fun getAllComicsOfCollectionFlow(id: Long): Flow<List<Comic>>
 
