@@ -14,6 +14,9 @@ A Dr. Doofenshmirtz themed Android comic reader app for `.cbz` archives. Organis
 - **Comic Collections** — organise comics into named collections; move comics between collections
 - **Library Management** — sort by name or date, filter by date range, search by title
 - **Background Scanning** — WorkManager scans selected folders and syncs your library in the background without blocking the UI
+- **Comic Reader** — full-screen horizontal pager with pinch-to-zoom on each page; tap to toggle the UI chrome
+- **Page Slider** — bottom bar scrubber lets you jump to any page instantly
+- **Loading Indicator** — animated loading state while pages are extracted from the archive
 
 ---
 
@@ -24,7 +27,7 @@ A Dr. Doofenshmirtz themed Android comic reader app for `.cbz` archives. Organis
 | Onboarding | One-time storage folder picker using Android's DocumentTree intent |
 | Comic Library | Grid of all collections; create, delete, and search collections |
 | Comic Collection | Comics within a collection; multi-select, move, and manage |
-| Comic Reader | Full-screen page viewer for the selected comic |
+| Comic Reader | Full-screen horizontal pager; pinch-to-zoom per page; tap to toggle chrome; page slider |
 
 ---
 
@@ -59,6 +62,7 @@ Parsing happens in the background via `ComicMetadataScannerWorker` using Android
 | Preferences | DataStore |
 | Background Work | WorkManager |
 | Image Loading | Coil Compose |
+| Zoom / Pan | Telephoto (`me.saket.telephoto`) |
 | Navigation | Compose Navigation with type-safe routes |
 | Min SDK | 30 (Android 11) |
 | Target SDK | 36 (Android 16) |
@@ -93,7 +97,8 @@ app/
         │   │   └── usecase/        # All use cases
         │   └── presentation/
         │       ├── screens/        # ComicLibraryScreen, ComicCollectionScreen, ComicScreen
-        │       ├── viewmodels/     # ComicLibraryViewModel, ComicCollectionViewModel
+        │       ├── viewmodels/     # ComicLibraryViewModel, ComicCollectionViewModel, ComicViewModel
+        │       ├── navigation/     # ComicGraph, ComicNavigation, ComicRoute
         │       └── components/     # Reusable Compose components
         └── onboarding/
             ├── domain/
